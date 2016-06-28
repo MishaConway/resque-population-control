@@ -5,8 +5,9 @@ module Resque
 
       class PopulationExceeded < ::StandardError; end;
 
-      def population_control max
+      def population_control max, options = {}
         @population_control_max = max
+        @population_control_options = options
       end
 
       def population_controlled?
@@ -17,8 +18,10 @@ module Resque
         population_control_count = population_control_increment
         if population_control_count > population_control_max
           population_control_decrement
-          suppress_exception = respond_to?(:on_population_exceeded) && on_population_exceeded(population_control_max, *args)
-          unless suppress_exception
+          if respond_to? :on_population_exceeded
+            on_population_exceeded(population_control_max, *args)
+          end
+          unless @population_control_options[:suppress_exceptions]
             raise PopulationExceeded, "Enqueuing #{name} would exceed max allowed population of #{population_control_max}."
           end
           false
