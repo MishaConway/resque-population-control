@@ -1,7 +1,7 @@
 module Resque
   module Plugins
     module PopulationControl
-      VERSION = "0.2.0"
+      VERSION = "0.4.0"
 
       class PopulationExceeded < ::StandardError; end;
 
@@ -38,7 +38,7 @@ module Resque
       end
 
       def population_control_decrement
-        population_control_redis.decr population_control_cache_key
+        population_control_redis.set population_control_cache_key, 0 if population_control_redis.decr(population_control_cache_key) <= 0
       end
 
       def population_control_redis
