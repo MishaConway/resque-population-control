@@ -13,7 +13,10 @@ module Resque
         population_control_count = population_control_increment
         if population_control_count > population_control_max
           population_control_decrement
-          raise PopulationExceeded
+          suppress_exception = respond_to?(:on_population_exceeded) && on_population_exceeded(population_control_max, *args)
+          unless suppress_exception
+            raise PopulationExceeded, "Enqueuing #{name} would exceed max allowed population of #{population_control_max}."
+          end
           false
         end
       end
