@@ -1,6 +1,6 @@
-# Population::Control
+# Resque Population Control!
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/population/control`. To experiment with that code, run `bin/console` for an interactive prompt.
+Resque jobs getting out of hand? Bring them to order with this new resque plugin!
 
 TODO: Delete this and the text above, and describe your gem
 
@@ -9,7 +9,7 @@ TODO: Delete this and the text above, and describe your gem
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'population-control'
+gem 'resque-population-control'
 ```
 
 And then execute:
@@ -18,11 +18,22 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install population-control
+    $ gem install resque-population-control
 
 ## Usage
 
-TODO: Write usage instructions here
+The following examples limits Job to having at most 100 enqeueud or running instances.
+
+    class Job
+        extend Resque::Plugins::PopulationControl
+        population_control 100
+
+         @queue = :jobs
+
+        def self.perform(customer_id)
+           ...
+        end
+    end
 
 ## Development
 
@@ -32,5 +43,5 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/population-control.
+Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/resque-population-control.
 

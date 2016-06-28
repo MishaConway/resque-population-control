@@ -9,6 +9,10 @@ module Resque
         @population_control_max = max
       end
 
+      def population_controlled?
+        population_control_redis.get(population_control_cache_key).to_i <= population_control_max
+      end
+
       def before_enqueue *args
         population_control_count = population_control_increment
         if population_control_count > population_control_max
