@@ -1,0 +1,1 @@
+require 'resque/plugins/population_control'
