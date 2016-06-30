@@ -1,7 +1,7 @@
 module Resque
   module Plugins
     module PopulationControl
-      VERSION = "0.6.0"
+      VERSION = "0.7.0"
 
       class PopulationExceeded < ::StandardError; end;
 
@@ -22,7 +22,7 @@ module Resque
         population_control_count >= population_control_max
       end
 
-      def before_enqueue *args
+      def before_enqueue_population_control *args
         population_control_count = population_control_increment
         if population_control_count > population_control_max
           population_control_decrement
@@ -36,11 +36,11 @@ module Resque
         end
       end
 
-      def after_perform *args
+      def after_perform_population_control *args
         population_control_decrement
       end
 
-      def on_failure e, *args
+      def on_failure_population_control e, *args
         population_control_decrement
       end
 
