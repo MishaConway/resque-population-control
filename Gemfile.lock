@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    resque-population-control (0.1.0)
+    resque-population-control (0.7.0)
 
 GEM
   remote: https://rubygems.org/

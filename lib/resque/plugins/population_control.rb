@@ -1,9 +1,13 @@
 module Resque
   module Plugins
     module PopulationControl
-      VERSION = "0.7.0"
+      VERSION = "0.8.0"
 
       class PopulationExceeded < ::StandardError; end;
+
+      class << self
+        attr_accessor :redis
+      end
 
       def population_control max, options = {}
         @population_control_max = max
@@ -61,7 +65,7 @@ module Resque
       end
 
       def population_control_redis
-        @population_control_redis ||= Resque.redis.redis
+        @population_control_redis ||= Resque::Plugins::PopulationControl.redis || Resque.redis.redis
       end
 
       def population_control_cache_key
